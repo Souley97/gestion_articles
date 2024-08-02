@@ -53,7 +53,19 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+    // message error et validation
+    if (!$article) {
+            return response()->json(['error' => 'Article non trouvée'], 404);
+        }
+        $request->validate([
+            'title' =>'required|max:255',
+            'body' =>'required',
+        ]);
+
+        // update and save the article
+        $article->update($request->all());
+
+        return response()->json($article, 200);
         
     }
 
