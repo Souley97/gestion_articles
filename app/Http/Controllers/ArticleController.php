@@ -12,7 +12,12 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        $articles = Article::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'Liste des articles récupérée avec succès',
+            'data' => $articles
+        ], 200);
     }
 
     /**
@@ -20,7 +25,20 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validation
+        $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        // create and save new article
+        $article = Article::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Article créé avec succès',
+            'data' => $article
+        ], 201);
     }
 
     /**
@@ -28,7 +46,20 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        // message error
+        if (!$article) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Article non trouvé'
+            ], 404);
+        }
+
+        // return the article
+        return response()->json([
+            'success' => true,
+            'message' => 'Article récupéré avec succès',
+            'data' => $article
+        ], 200);
     }
 
     /**
@@ -36,7 +67,27 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        // message error et validation
+        if (!$article) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Article non trouvé'
+            ], 404);
+        }
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        // update and save the article
+        $article->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Article mis à jour avec succès',
+            'data' => $article
+        ], 200);
     }
 
     /**
@@ -44,6 +95,20 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        // message error
+        if (!$article) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Article non trouvé'
+            ], 404);
+        }
+
+        // delete the article
+        $article->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Article supprimé avec succès'
+        ], 204);
     }
 }
