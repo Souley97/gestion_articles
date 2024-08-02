@@ -20,7 +20,16 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validation
+        $request->validate([
+            'title' =>'required|max:255',
+            'body' =>'required',
+        ]);
+
+        // create and save new article
+        $articles = Article::create($request);
+
+        return response()->json($articles, 201);
     }
 
     /**
