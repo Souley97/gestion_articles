@@ -37,7 +37,15 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        // message error
+        if (!$article) {
+            return response()->json(['error' => 'Article no trouvée'], 404);
+        }
+
+        // return the article
+        return response()->json($article);
+        
+        
     }
 
     /**
@@ -46,6 +54,7 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         //
+        
     }
 
     /**
